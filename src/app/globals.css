@@ -128,3 +128,151 @@ input[type="number"] {
   outline-offset: 2px;
   border-radius: 12px;
 }
+
+/* === AMBIENT MESH BACKGROUND === */
+@keyframes ambient-drift {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate(2%, -3%) rotate(120deg) scale(1.08); }
+  66% { transform: translate(-2%, 3%) rotate(240deg) scale(0.96); }
+  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
+.ambient-mesh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.ambient-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.5;
+  animation: ambient-drift 30s infinite linear;
+}
+
+.ambient-blob-1 {
+  top: -10%;
+  right: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
+}
+
+.ambient-blob-2 {
+  bottom: -20%;
+  left: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+  animation-direction: reverse;
+  animation-duration: 40s;
+}
+
+.ambient-blob-3 {
+  top: 30%;
+  left: 50%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.03) 0%, transparent 70%);
+  animation-duration: 50s;
+}
+
+/* === GLOW PULSE === */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 60px rgba(245, 158, 11, 0); }
+  50% { box-shadow: 0 0 80px rgba(245, 158, 11, 0.3); }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* === FLOATING WIDGET === */
+.floating-widget {
+  position: fixed;
+  z-index: 60;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.floating-widget:active {
+  cursor: grabbing;
+}
+
+.floating-widget-card {
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    0 16px 48px rgba(0, 0, 0, 0.12),
+    0 32px 80px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(244, 244, 245, 0.8);
+  overflow: hidden;
+}
+
+/* === SHIMMER TEXT === */
+@keyframes text-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #71717A 0%,
+    #09090B 25%,
+    #71717A 50%,
+    #09090B 75%,
+    #71717A 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: text-shimmer 3s linear infinite;
+}
+
+/* === PARTICLE FIELD === */
+@keyframes float-up {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.4);
+  pointer-events: none;
+}
+
+/* === ENGRAVE EFFECT === */
+.engrave {
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8),
+    0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* === BLUR LAYER === */
+.blur-layer {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.7);
+}

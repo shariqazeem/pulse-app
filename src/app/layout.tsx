@@ -13,6 +13,16 @@ export const metadata: Metadata = {
   title: "Pulse — Live Tipping for Starknet",
   description:
     "Real-time tipping for streamers, podcasters, and live events. Built on Starknet with Starkzap v2.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  openGraph: {
+    title: "Pulse — Live Tipping for Starknet",
+    description:
+      "Real-time tipping for streamers, podcasters, and live events. Gasless. Social login. Built with Starkzap v2.",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({

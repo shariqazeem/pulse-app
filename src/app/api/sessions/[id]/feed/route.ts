@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { getNewTipsSince } from "@/lib/tips";
+import { getNewTipsSince, getTipsForSession } from "@/lib/tips";
 import { getSession } from "@/lib/sessions";
 
 export const runtime = "nodejs";
@@ -17,7 +17,6 @@ export async function GET(
   const stream = new ReadableStream({
     async start(controller) {
       const encoder = new TextEncoder();
-      let lastTipId = 0;
       let alive = true;
 
       // Send initial connection event
@@ -32,6 +31,10 @@ export async function GET(
           )
         );
       }
+
+      // Start from the LATEST tip ID — don't replay existing tips
+      const existingTips = await getTipsForSession(id, 1);
+      let lastTipId = existingTips.length > 0 ? existingTips[0].id : 0;
 
       const interval = setInterval(async () => {
         if (!alive) return;
