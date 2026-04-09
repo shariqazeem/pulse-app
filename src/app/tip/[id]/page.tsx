@@ -31,10 +31,12 @@ export default function TipPage() {
   const [message, setMessage] = useState("");
   const [showMessageField, setShowMessageField] = useState(false);
   const [wallet, setWallet] = useState<unknown>(null);
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
   const [success, setSuccess] = useState<{ hash: string; explorerUrl?: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showFundWallet, setShowFundWallet] = useState(false);
 
   // Fetch session
   useEffect(() => {
@@ -85,6 +87,7 @@ export default function TipPage() {
         })),
       });
       setWallet(w);
+      setWalletAddress(String((w as { address?: unknown }).address ?? ""));
       playPop();
     } catch (err) {
       console.error("Connect failed:", err);
@@ -149,6 +152,7 @@ export default function TipPage() {
       let clean = "Tip failed. Please try again.";
       if (msg.includes("u256") || msg.includes("Overflow")) {
         clean = `Insufficient ${token} balance.`;
+        setShowFundWallet(true);
       } else if (msg.includes("Invalid amount")) {
         clean = "Invalid amount.";
       }
@@ -352,6 +356,51 @@ export default function TipPage() {
         <p className="mx-auto mt-4 max-w-[280px] text-center text-xs text-red-500">
           {error}
         </p>
+      )}
+
+      {/* Fund wallet helper */}
+      {showFundWallet && walletAddress && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-auto mt-3 w-full max-w-[280px]"
+        >
+          <div className="rounded-2xl bg-amber-50 p-4 text-center ring-1 ring-amber-100">
+            <p className="text-[12px] font-medium text-zinc-900">
+              Fund your wallet to tip
+            </p>
+            <p className="mt-1.5 text-[10px] text-zinc-500">
+              Send tokens to this address:
+            </p>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(walletAddress);
+              }}
+              className="mt-2 w-full rounded-xl bg-white px-3 py-2 font-mono text-[9px] text-zinc-700 ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50 active:bg-zinc-100"
+            >
+              {walletAddress.slice(0, 12)}...{walletAddress.slice(-8)}
+              <span className="ml-1 text-zinc-400">tap to copy</span>
+            </button>
+            <div className="mt-3 flex items-center justify-center gap-2">
+              <a
+                href="https://app.avnu.fi/en?tokenFrom=0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7&tokenTo=0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-zinc-900 px-3 py-1.5 text-[10px] font-medium text-white transition-colors hover:bg-zinc-700"
+              >
+                Buy STRK on AVNU
+              </a>
+              <a
+                href="https://ramp.network/buy?defaultAsset=STRK_STARKNET"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-white px-3 py-1.5 text-[10px] font-medium text-zinc-700 ring-1 ring-zinc-200 transition-colors hover:bg-zinc-50"
+              >
+                Buy with card
+              </a>
+            </div>
+          </div>
+        </motion.div>
       )}
 
       {/* CTA */}
